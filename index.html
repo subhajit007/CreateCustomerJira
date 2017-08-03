@@ -1,0 +1,68 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Create SD Customer</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+  <link rel="stylesheet" href="index.css">
+  <script type="text/javascript" src="js/index.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+
+
+<body>
+  <div class="jumbotron">
+  <div class="container">
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+  <!-- Navbar content -->
+  <span class="navbar-text">
+    Create Customer via JIRA Service Desk REST API.
+    <a href="https://docs.atlassian.com/jira-servicedesk/REST/3.6.2/#servicedeskapi/customer-createCustomer" target="_blank">API details</a>
+  </span>
+</nav>
+</nav>
+  <h2>Create Service Desk Customer</h2>
+    <div class="form-group" id="halfsize">
+      <label for="Full name">Full Name:</label>
+      <input type="name" class="form-control" id="name" placeholder="Enter name" name="name">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+    </div>
+    <div class="form-group"id="halfsize">
+      <label for="pwd">Group:</label>
+      <input type="password" class="form-control" id="pwd" placeholder="Service Desk Group" name="pwd">
+    </div>
+    <button type="submit" class="btn btn-primary" onclick="UserAction()">Submit</button>
+  </form>
+  <br>
+  <div>
+</div>
+</div>
+</div>
+  <!-- Submit button function  -->
+  <script>
+  $("button").on("click", function UserAction(){
+      //console.log("hii");
+      $.ajax({
+        headers:{
+           "key":"X-ExperimentalApi : true",
+     "Accept":"application/json",//depends on your api
+      "Content-type":"application/json"//depends on your api
+        },   url:"https://subhajitusa.atlassian.net/rest/servicedeskapi/customer",
+        success:function(response){
+          var r=JSON.parse(response);
+          $("#main").html(r.base);
+        }
+      });
+});
+  </script>
+  <footer id="sticky">Subhajit Banerjee</footer>
+</body>
+</html>
