@@ -6,10 +6,11 @@
 
   <title>Create SD Customer</title>
   <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
+  <meta name="author" content="SubhajitBanerjee">
 
   <link rel="stylesheet" href="index.css">
-  <script type="text/javascript" src="js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="effect/sweetalert.css">
+  <script src="effect/sweetalert.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -23,46 +24,61 @@
     <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
   <!-- Navbar content -->
   <span class="navbar-text">
-    Create Customer via JIRA Service Desk REST API.
+    Create Customer via JIRA Service Desk REST API. This operation does not cause invitation email to be sent to the newly created customer.
+JIRA administrator global permission is required to create a customer.
+
     <a href="https://docs.atlassian.com/jira-servicedesk/REST/3.6.2/#servicedeskapi/customer-createCustomer" target="_blank">API details</a>
   </span>
 </nav>
 </nav>
-  <h2>Create Service Desk Customer</h2>
+  <h2>Create A Service Desk Customer</h2>
     <div class="form-group" id="halfsize">
       <label for="Full name">Full Name:</label>
       <input type="name" class="form-control" id="name" placeholder="Enter name" name="name">
       <label for="email">Email:</label>
       <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
     </div>
-    <div class="form-group"id="halfsize">
+    <!-- <div class="form-group"id="halfsize">
       <label for="pwd">Group:</label>
       <input type="password" class="form-control" id="pwd" placeholder="Service Desk Group" name="pwd">
-    </div>
-    <button type="submit" class="btn btn-primary" onclick="UserAction()">Submit</button>
+    </div> -->
+    <button type="submit" id="submitButton" class="btn btn-primary" onclick="UserAction()">Submit</button>
   </form>
   <br>
   <div>
 </div>
 </div>
 </div>
-  <!-- Submit button function  -->
+  <!-- Submit button function and JIRA REST API Call -->
   <script>
-  $("button").on("click", function UserAction(){
-      //console.log("hii");
-      $.ajax({
-        headers:{
-           "key":"X-ExperimentalApi : true",
-     "Accept":"application/json",//depends on your api
-      "Content-type":"application/json"//depends on your api
-        },   url:"https://subhajitusa.atlassian.net/rest/servicedeskapi/customer",
-        success:function(response){
-          var r=JSON.parse(response);
-          $("#main").html(r.base);
+
+  function UserAction() {
+
+     var postData = {
+       fullName: $("#name").val(),
+       email: $("#email").val()
+     };
+
+    $.ajax({
+        url: 'https://subhajitusa.atlassian.net/rest/servicedeskapi/customer',
+        type: 'POST',
+        contentType: 'application/json',
+        headers:{"key":"X-ExperimentalApi : true","Accept":"application/json"},
+        crossDomain: true,
+        data: postData,
+        beforeSend : function( xhr ) {
+            xhr.setRequestHeader('Authorization', 'Basic ' + window.btoa('admin id :password'));
+        },
+        success: function(){
+          swal('Good job!','You created a customer!','success') //swal = javascript alert. Do not change the word swal
+        },
+        error: function(){
+          swal('Oops...','Something went wrong! Check the console','error')
         }
-      });
-});
+    });
+  };
   </script>
+  <!-- Submit button function and JIRA REST API Call ends-->
   <footer id="sticky">Subhajit Banerjee</footer>
 </body>
 </html>
